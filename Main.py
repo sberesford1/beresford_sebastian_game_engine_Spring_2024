@@ -1,6 +1,6 @@
 # This file was created by: Sebastian
 
-# 
+# goals,rules, feedback, freedom, verb (action a player makes)
 import pygame as pg
 from setting import *
 from Sprites import *
