@@ -1,10 +1,10 @@
 xxxxxxxxxxxxxxxxxxxx.
 x..............xxxxxxxxxxxx
 xxxxxx...............xxxxxx
-xxx.................p.....xxxx..................x
+xxx.......................xxxx..................x
 xx....xxxxxxxxxxxxxxxxxxxxxxxx................x
 xxx....xxxx................................x
-xxx...........................x................x
+xxx..............p............x................x
 xxx....x........................xx..................x
 xx.....xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 x....xxxxxxxxxxxxxxxxxxxxxxxxxxxx.
@@ -18,6 +18,6 @@ x.....................................d.......x
 xx...x....................xxxx............xxxxx.......xxx..x.x
 xx....x............xxxxxxxxxxxxxx....xxxxxxxxxxx.........xxxx
 xx........xxxxxxxx........................x..............x.xx.x.x
-xx.....xxxxxxxxx.........\xxx....................xx................x
+xx.....xxxxxxxxx.........xxx....................xx................x
 xx............................xxxxxxxx...x.............................x
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
