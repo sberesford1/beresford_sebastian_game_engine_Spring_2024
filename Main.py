@@ -27,7 +27,6 @@ class Game:
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder,'images')
         self.player_img = pg.image.load(path.join(img_folder, 'mario.png')).convert_alpha()
-        self.playing
         self.map_data = []
         '''
         The with statement is a context manager in Python. 
@@ -43,6 +42,7 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.deathblocks = pg.sprite.Group()
+         pg.mixer.music.load(path.join(self.snd_folder
         # self.player = Player(self, 10, 10)
         # self.all_sprites.add(self.player)
         # for x in range(10, 20):
