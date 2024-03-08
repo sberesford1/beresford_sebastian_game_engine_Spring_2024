@@ -27,6 +27,7 @@ class Game:
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder,'images')
         self.player_img = pg.image.load(path.join(img_folder, 'mario.png')).convert_alpha()
+        self.playing
         self.map_data = []
         '''
         The with statement is a context manager in Python. 
