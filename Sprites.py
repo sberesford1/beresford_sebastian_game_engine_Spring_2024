@@ -9,9 +9,9 @@ class Player(pg.sprite.Sprite):
         self.groups = game.all_sprites
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        #self.image = pg.Surface((TILESIZE, TILESIZE))
-        #self.image.fill(GREEN)
-        self.image = game.player_img
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(GREEN)
+        #self.image = game.player_img
         self.rect = self.image.get_rect()
         self.vx, self.vy = 0, 0
         self.x = x * TILESIZE
@@ -103,8 +103,9 @@ class Deathblock(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.deathblocks
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(RED)
+        # self.image = pg.Surface((TILESIZE, TILESIZE))
+        # self.image.fill(RED)
+        self.image = game.deathblocks_img
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
