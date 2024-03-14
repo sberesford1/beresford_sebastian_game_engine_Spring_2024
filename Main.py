@@ -27,7 +27,7 @@ class Game:
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder,'images')
         self.player_img = pg.image.load(path.join(img_folder, 'Bettermario.png')).convert_alpha()
-        self.deathblocks_img = pg.image.load(path.join(img_folder, 'spikes.png')).convert_alpha()
+        self.deathblocks_img = pg.image.load(path.join(img_folder, 'betterspikes.png')).convert_alpha()
         self.snd_folder = path.join(game_folder, 'sounds')
         self.map_data = []
         '''

@@ -55,6 +55,9 @@ class Player(pg.sprite.Sprite):
             hits = pg.sprite.spritecollide(self, self.game.deathblocks, False )
             if hits:
                 self.death()
+    def collide_with_Speedbump(self, dir) :
+        if dir == "x":
+            hits = pg.sprite.spritecollide(self,self.game.Speedbumps, True)
     # old motion
     # def move(self, dx=0, dy=0):
     #     self.x += dx
@@ -75,6 +78,7 @@ class Player(pg.sprite.Sprite):
         self.collide_with_deathblocks('x')
         # self.rect.x = self.x * TILESIZE
         # self.rect.y = self.y * TILESIZE
+        self.collide_with_S(self.game.speedboost, True)
 
 class Wall(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -111,5 +115,19 @@ class Deathblock(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+    
 
 
+class Speedbump(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.Speedbump
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(RED)
+        #self.image = game.deathblocks_img
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
