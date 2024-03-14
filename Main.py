@@ -18,7 +18,7 @@ class Game:
         # 
         pg.display.set_caption("My First Video Game")
         # 
-        self.clock = pg.time.Clock()
+        self.clock = pg.time.Clock()    
         pg.key.set_repeat(500, 100)
         self.running = True
         # later on we'll story game info with this
@@ -53,10 +53,10 @@ class Game:
             print(row)
             for col, tile in enumerate(tiles):
                 print(col)
-                if tile == 'x':
+                if tile == '1':
                     print("a wall at", row, col)
                     Wall(self, col, row)
-                if tile == 'p':
+                if tile == 'C':
                     self.p1col = col
                     self.p1row = row
                     self.p1 = Player(self, self.p1col, self.p1row)
