@@ -1,4 +1,4 @@
-# This file was created by: Sebastian
+        # This file was created by: Sebastian
 
 # goals,rules, feedback, freedom, verb (action a player makes)
 import pygame as pg
