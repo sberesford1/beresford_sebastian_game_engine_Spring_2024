@@ -10,7 +10,7 @@ from os import path
 
 # create a game class 
 class Game:
-    # behold the methods...
+    # behold the methds...
     def __init__(self):
         pg.init()
         # 

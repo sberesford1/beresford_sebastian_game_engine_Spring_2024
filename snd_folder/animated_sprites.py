@@ -30,7 +30,7 @@ class Spritesheet:
         # image = pg.transform.scale(image, (width, height))
         image = pg.transform.scale(image, (width * 4, height * 4))
         return image
-    
+
 # this is the player class
 class Animated_sprite(Sprite):
     def __init__(self):
@@ -43,7 +43,7 @@ class Animated_sprite(Sprite):
         self.walking = False
         self.current_frame = 0
         self.last_update = 0
-        
+
     def load_images(self):
         self.standing_frames = [self.spritesheet.get_image(0, 0, 32, 32),
                                 self.spritesheet.get_image(32, 0, 32, 32)]
