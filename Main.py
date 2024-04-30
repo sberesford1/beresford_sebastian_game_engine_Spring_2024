@@ -1,4 +1,4 @@
-        # This file was created by: Sebastian
+    # This file was created by: Sebastian
 
 # goals,rules, feedback, freedom, verb (action a player makes)
 import pygame as pg
@@ -28,12 +28,19 @@ class Game:
         img_folder = path.join(game_folder,'images')
         self.player_img = pg.image.load(path.join(img_folder, 'Bettermario.png')).convert_alpha()
         self.deathblocks_img = pg.image.load(path.join(img_folder, 'betterspikes.png')).convert_alpha()
+        self.mobs_img = pg.image.load(path.join(img_folder, 'Goomba.png')).convert_alpha()
         self.snd_folder = path.join(game_folder, 'sounds')
         self.map_data = []
         '''
         The with statement is a context manager in Python. 
         It is used to ensure that a resource is properly closed or released 
         after it is used. This can help to prevent errors and leaks.
+
+
+
+        Want to make the game challenging by adding
+         Weapons and mobs - make the game have a main goal or ending.   
+
         '''
         with open(path.join(game_folder, 'map.txt'), 'rt') as f:
             for line in f:
@@ -44,6 +51,8 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.deathblocks = pg.sprite.Group()
+        self.mobs = pg.sprite.Group()
+        self.Speedboost = pg.sprite.Group()
         #pg.mixer.music.load(path.join(self.snd_folder))
         # self.player = Player(self, 10, 10)
         # self.all_sprites.add(self.player)
@@ -62,7 +71,12 @@ class Game:
                     self.p1 = Player(self, self.p1col, self.p1row)
                     self.player = Player(self, col, row)
                 if tile == 'd':
+                    if tile == 'M':
+                        Mob(self, col, row)
                     Deathblock(self,col,row)
+                    if tile == 'S':
+                        Speedboost(self, col, row)
+                        #letters can determine where each item/player spawns on map
     def run(self):
         self.playing = True
         while self.playing:
@@ -73,6 +87,7 @@ class Game:
             self.update()
             # this output
             self.draw()
+            #frames per second
 
     def quit(self):
         pg.quit()
@@ -82,12 +97,14 @@ class Game:
         pass
     def update(self):
         self.all_sprites.update()
+        #updates the game to keep up
     
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
             pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
         for y in range(0, HEIGHT, TILESIZE):
             pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
+            #grid size and coords
 
     def draw(self):
         self.screen.fill(BGCOLOR)
@@ -119,12 +136,30 @@ class Game:
         pass
     def show_go_screen(self):
         pass
+    def show_start_screen(self):
+        self.screen.fill(BGCOLOR)
+        self.draw_text(self.screen, "This is the start screen", 24, WHITE, WIDTH/2 - 32, 2)
+        pg.display.flip()
+        self.wait_for_key(e)
+        #start screen, beginning the game
+
+    def wait_for_key(self):
+        waiting = True
+        while waiting:
+            self.clock.tick(FPS)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    waiting = False
+                    self.quit()
+                if event.type == pg.KEYUP:
+                    waiting = False
     #def run(self):
         #pg.mixer.music.play(loops=-1)
 ####################### Instantiate game... ###################
 g = Game()
 # g.show_go_screen()
+#g.show_start_screen()
 while True:
+   # g.show_go_screen()
     g.new()
     g.run()
-    # g.show_go_screen()

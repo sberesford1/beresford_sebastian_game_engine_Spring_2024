@@ -1,8 +1,7 @@
-# This file was created by: Sebastian
+543# This file was created by: Sebastian
 
 import pygame as pg
 from setting import *
-
 # write a player class
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -16,6 +15,9 @@ class Player(pg.sprite.Sprite):
         self.vx, self.vy = 0, 0
         self.x = x * TILESIZE
         self.y = y * TILESIZE
+        self.moneybag = 0
+        self.speed = 300
+        #coins collect
     def death(self) :
         self.x = self.game.p1col *TILESIZE
         self.y = self.game.p1row *TILESIZE
@@ -23,13 +25,19 @@ class Player(pg.sprite.Sprite):
         self.vx, self.vy = 0, 0
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
+            self.vx = -self.speed 
             self.vx = -PLAYER_SPEED
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
+            self.vx = -self.speed 
             self.vx = PLAYER_SPEED
         if keys[pg.K_UP] or keys[pg.K_w]:
+            self.vy = -self.speed 
             self.vy = -PLAYER_SPEED
         if keys[pg.K_DOWN] or keys[pg.K_s]:
-            self.vy = PLAYER_SPEED
+            self.vy = -self.speed 
+            #self.vy = PLAYER_SPEED
+            #keybinds and speed for player
+            #speed change for speed boost
             
     def collide_with_walls(self, dir):
         if dir == 'x':
@@ -41,6 +49,7 @@ class Player(pg.sprite.Sprite):
                     self.x = hits[0].rect.right
                 self.vx = 0
                 self.rect.x = self.x
+                #collision for walls/deathblock
         if dir == 'y':
             hits = pg.sprite.spritecollide(self, self.game.walls, False )
             if hits:
@@ -55,9 +64,23 @@ class Player(pg.sprite.Sprite):
             hits = pg.sprite.spritecollide(self, self.game.deathblocks, False )
             if hits:
                 self.death()
-    def collide_with_Speedbump(self, dir) :
+    def collide_with_Speedboost(self, dir) :
+        #COLLISION FOR SPEED BOOST
         if dir == "x":
-            hits = pg.sprite.spritecollide(self,self.game.Speedbumps, True)
+            hits = pg.sprite.spritecollide(self,self.game.Speedboost, True)
+                
+    def collide_with_group(self, group, kill):
+            hits = pg.sprite.spritecollide(self, group, False)
+            if str(hits[0].__class__.__name__) == "Coin":
+                self.moneybag += 1
+            if str(hits[0].__class__.__name__) == "Speedboost":
+                #self.vx = PLAYER_SPEED = 800
+                 self.speed += 300
+                 if str(hits[0].__class__.__name__) == "Mob":
+                    self.detath()
+#INCREASING SPEED, WHEN COLLIDING WITH SPEED BOOST
+        
+        
     # old motion
     # def move(self, dx=0, dy=0):
     #     self.x += dx
@@ -76,9 +99,27 @@ class Player(pg.sprite.Sprite):
         self.rect.y = self.y
         self.collide_with_walls('y')
         self.collide_with_deathblocks('x')
+        self.collide_with_group(self.game.mobs, False)
         # self.rect.x = self.x * TILESIZE
         # self.rect.y = self.y * TILESIZE
-        
+        # UPDATES GAME TO KEEP UP
+
+class Mob(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.mobs
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(ORANGE)
+        #self.image = self.game.mob_img
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        # self.vx, self.vy = 100, 100
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
+        self.speed = 100
+
 
 class Wall(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -93,6 +134,7 @@ class Wall(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
         self.speed = 0
+        # ADDS WALLS TO THE GAME( OUTER)
     def update(self):
         # self.rect.x += 1
         self.rect.x += TILESIZE * self.speed
@@ -101,6 +143,7 @@ class Wall(pg.sprite.Sprite):
             self.speed *= -1
         # if self.rect.y > HEIGHT or self.rect.y < 0:
         #     self.speed *= -1
+
 
 class Deathblock(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -111,22 +154,38 @@ class Deathblock(pg.sprite.Sprite):
         self.image.fill(RED)
         self.image = game.deathblocks_img
         self.rect = self.image.get_rect()
+        # kills player and respawns it where it spawned before
         self.x = x
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
     
 
-class Speedbump(pg.sprite.Sprite):
+class Speedboost(pg.sprite.Sprite):
     def __init__(self, game, x, y):
-        self.groups = game.all_sprites, game.Speedbump
+        self.groups = game.all_sprites, game.Speedboost 
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(RED)
         #self.image = game.deathblocks_img
+        # doubles the speed of player when interacting
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+class Coin(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.coins
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(YELLOW)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+        # ADDS A COIN, THAT U CAN COLLECT
