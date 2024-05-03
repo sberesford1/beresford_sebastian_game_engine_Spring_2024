@@ -29,6 +29,7 @@ class Game:
         self.player_img = pg.image.load(path.join(img_folder, 'Bettermario.png')).convert_alpha()
         self.deathblocks_img = pg.image.load(path.join(img_folder, 'betterspikes.png')).convert_alpha()
         self.mobs_img = pg.image.load(path.join(img_folder, 'Goomba.png')).convert_alpha()
+        self.fakewalls_img = pg.image.load(path.join(img_folder, 'Fakewall.png')).convert_alpha()
         self.snd_folder = path.join(game_folder, 'sounds')
         self.map_data = []
         '''
@@ -53,6 +54,7 @@ class Game:
         self.deathblocks = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
         self.Speedboost = pg.sprite.Group()
+        self.fakewalls = pg.sprite.Group()
         #pg.mixer.music.load(path.join(self.snd_folder))
         # self.player = Player(self, 10, 10)
         # self.all_sprites.add(self.player)
@@ -71,11 +73,15 @@ class Game:
                     self.p1 = Player(self, self.p1col, self.p1row)
                     self.player = Player(self, col, row)
                 if tile == 'd':
-                    if tile == 'M':
-                        Mob(self, col, row)
                     Deathblock(self,col,row)
-                    if tile == 'S':
-                        Speedboost(self, col, row)
+                if tile == 'M':
+                    Mob(self, col, row)
+                if tile == 'F':
+                    FakeWall(self,col,row)
+                   
+                if tile == 'S':   
+                    Speedboost(self, col, row)
+                    
                         #letters can determine where each item/player spawns on map
     def run(self):
         self.playing = True

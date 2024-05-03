@@ -71,13 +71,12 @@ class Player(pg.sprite.Sprite):
                 
     def collide_with_group(self, group, kill):
             hits = pg.sprite.spritecollide(self, group, False)
-            if str(hits[0].__class__.__name__) == "Coin":
-                self.moneybag += 1
-            if str(hits[0].__class__.__name__) == "Speedboost":
-                #self.vx = PLAYER_SPEED = 800
-                 self.speed += 300
-                 if str(hits[0].__class__.__name__) == "Mob":
-                    self.detath()
+        
+    def collide_with_mob(self, dir):
+        if dir == 'x':
+            hits = pg.sprite.spritecollide(self,self.game.mob, False)
+                
+                    
 #INCREASING SPEED, WHEN COLLIDING WITH SPEED BOOST
         
         
@@ -144,7 +143,19 @@ class Wall(pg.sprite.Sprite):
         # if self.rect.y > HEIGHT or self.rect.y < 0:
         #     self.speed *= -1
 
-
+class FakeWall(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.fakewalls
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(LIGHTGREY)
+        self.rect = self.image.get_rect()
+        self.image = game.FakeWall_img
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
 class Deathblock(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.deathblocks
@@ -168,7 +179,7 @@ class Speedboost(pg.sprite.Sprite):
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(RED)
-        #self.image = game.deathblocks_img
+        self.image = game.Speedboost_img
         # doubles the speed of player when interacting
         self.rect = self.image.get_rect()
         self.x = x
