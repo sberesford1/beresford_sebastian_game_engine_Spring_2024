@@ -2,6 +2,30 @@
 
 import pygame as pg
 from setting import *
+from math import *
+
+vec = pg.math.Vector2
+
+def collide_with_walls(sprite, group, dir):
+    if dir == "x":
+        hits = pg.sprite.spritecollide(sprite, group, False)
+        if hits:
+            if hits[0].rect.centerx > sprite.rect.centerx:
+                sprite.pos.x = hits[0].rect.left - sprite.rect.width / 2
+            if hits[0].rect.centerx < sprite.rect.centerx:
+                sprite.pos.x = hits[0].rect.right + sprite.rect.width / 2
+            sprite.vel.x = 0
+            sprite.rect.centerx = sprite.pos.x
+    if dir == "y":
+        hits = pg.sprite.spritecollide(sprite, group, False)
+        if hits:
+            if hits[0].rect.centery > sprite.rect.centery:
+                sprite.pos.y = hits[0].rect.top - sprite.rect.height / 2
+            if hits[0].rect.centery < sprite.rect.centery:
+                sprite.pos.y = hits[0].rect.bottom + sprite.rect.height / 2
+            sprite.vel.y = 0
+            sprite.rect.centery = sprite.pos.y
+
 # write a player class
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -17,10 +41,11 @@ class Player(pg.sprite.Sprite):
         self.y = y * TILESIZE
         self.moneybag = 0
         self.speed = 300
+        self.start = (self.x, self.y)
+        self.colorchange = False
         #coins collect
     def death(self) :
-        self.x = self.game.p1col *TILESIZE
-        self.y = self.game.p1row *TILESIZE
+        self.x, self.y = self.start
     def get_keys(self):
         self.vx, self.vy = 0, 0
         keys = pg.key.get_pressed()
@@ -35,7 +60,7 @@ class Player(pg.sprite.Sprite):
             self.vy = -PLAYER_SPEED
         if keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vy = -self.speed 
-            #self.vy = PLAYER_SPEED
+            self.vy = PLAYER_SPEED
             #keybinds and speed for player
             #speed change for speed boost
             
@@ -71,6 +96,9 @@ class Player(pg.sprite.Sprite):
                 
     def collide_with_group(self, group, kill):
             hits = pg.sprite.spritecollide(self, group, False)
+            if hits:
+                if str(hits[0].__class__.__name__) == "Colorchange":
+                    self.colorchange = True
         
     def collide_with_mob(self, dir):
         if dir == 'x':
@@ -101,6 +129,8 @@ class Player(pg.sprite.Sprite):
         self.collide_with_group(self.game.mobs, False)
         # self.rect.x = self.x * TILESIZE
         # self.rect.y = self.y * TILESIZE
+        if self.colorchange:
+            self.image = self.game.Supermario.img
         # UPDATES GAME TO KEEP UP
 
 class Mob(pg.sprite.Sprite):
@@ -108,9 +138,9 @@ class Mob(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.mobs
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(ORANGE)
-        #self.image = self.game.mob_img
+        #self.image = pg.Surface((TILESIZE, TILESIZE))
+        #self.image.fill(ORANGE)
+        self.image = self.game.mobs_img
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -118,6 +148,26 @@ class Mob(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.speed = 100
+        self.pos = vec(x, y) * TILESIZE
+        self.vel = vec(0, 0)
+        self.acc = vec(0, 0)
+        self.rect.center = self.pos
+        self.rot = 0
+        self.speed = 150
+
+    def update(self):
+        #if abs(self.game.p1.rect.x - self.x)*32 < 5:
+        #    if abs(self.game.p1.rect.y - self.y)*32 < 5:
+        self.rot = (self.game.p1.rect.center - self.pos).angle_to(vec(1, 0))
+        self.rect.center = self.pos
+        self.acc = vec(self.speed, 0).rotate(-self.rot)
+        self.acc += self.vel * -1
+        self.vel += self.acc * self.game.dt
+        self.pos += self.vel * self.game.dt + 0.5 * self.acc * self.game.dt ** 2
+        collide_with_walls(self, self.game.walls, 'x')
+        collide_with_walls(self, self.game.walls, 'y')
+        collide_with_walls(self, self.game.fakewalls, 'x')
+        collide_with_walls(self, self.game.fakewalls, 'y')
 
 
 class Wall(pg.sprite.Sprite):
@@ -151,7 +201,7 @@ class FakeWall(pg.sprite.Sprite):
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(LIGHTGREY)
         self.rect = self.image.get_rect()
-        self.image = game.FakeWall_img
+        self.image = game.fakewalls_img
         self.x = x
         self.y = y
         self.rect.x = x * TILESIZE
@@ -187,9 +237,9 @@ class Speedboost(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
-class Coin(pg.sprite.Sprite):
+class Colorchange(pg.sprite.Sprite):
     def __init__(self, game, x, y):
-        self.groups = game.all_sprites, game.coins
+        self.groups = game.all_sprites, game.colorchangers
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
@@ -199,4 +249,4 @@ class Coin(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-        # ADDS A COIN, THAT U CAN COLLECT
+        

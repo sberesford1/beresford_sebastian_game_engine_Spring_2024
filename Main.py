@@ -30,6 +30,7 @@ class Game:
         self.deathblocks_img = pg.image.load(path.join(img_folder, 'betterspikes.png')).convert_alpha()
         self.mobs_img = pg.image.load(path.join(img_folder, 'Goomba.png')).convert_alpha()
         self.fakewalls_img = pg.image.load(path.join(img_folder, 'Fakewall.png')).convert_alpha()
+        self.Supermario_img = pg.image.load(path.join(img_folder, 'Supermario.png')).convert_alpha()
         self.snd_folder = path.join(game_folder, 'sounds')
         self.map_data = []
         '''
@@ -55,6 +56,7 @@ class Game:
         self.mobs = pg.sprite.Group()
         self.Speedboost = pg.sprite.Group()
         self.fakewalls = pg.sprite.Group()
+        self.colorchangers = pg.sprite.Group()
         #pg.mixer.music.load(path.join(self.snd_folder))
         # self.player = Player(self, 10, 10)
         # self.all_sprites.add(self.player)
@@ -78,7 +80,8 @@ class Game:
                     Mob(self, col, row)
                 if tile == 'F':
                     FakeWall(self,col,row)
-                   
+                if tile == 'c':
+                    Colorchange(self,col,row)
                 if tile == 'S':   
                     Speedboost(self, col, row)
                     
