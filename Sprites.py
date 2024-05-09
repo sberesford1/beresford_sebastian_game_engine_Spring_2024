@@ -127,10 +127,11 @@ class Player(pg.sprite.Sprite):
         self.collide_with_walls('y')
         self.collide_with_deathblocks('x')
         self.collide_with_group(self.game.mobs, False)
+        self.collide_with_group(self.game.colorchangers, True)
         # self.rect.x = self.x * TILESIZE
         # self.rect.y = self.y * TILESIZE
         if self.colorchange:
-            self.image = self.game.Supermario.img
+            self.image = self.game.Supermario_img
         # UPDATES GAME TO KEEP UP
 
 class Mob(pg.sprite.Sprite):
@@ -245,6 +246,7 @@ class Colorchange(pg.sprite.Sprite):
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
+        self.image = game.colorchangers_img
         self.x = x
         self.y = y
         self.rect.x = x * TILESIZE

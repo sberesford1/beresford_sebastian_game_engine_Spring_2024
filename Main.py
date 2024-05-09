@@ -31,6 +31,7 @@ class Game:
         self.mobs_img = pg.image.load(path.join(img_folder, 'Goomba.png')).convert_alpha()
         self.fakewalls_img = pg.image.load(path.join(img_folder, 'Fakewall.png')).convert_alpha()
         self.Supermario_img = pg.image.load(path.join(img_folder, 'Supermario.png')).convert_alpha()
+        self.colorchangers_img = pg.image.load(path.join(img_folder, 'Colorchange.png')).convert_alpha()
         self.snd_folder = path.join(game_folder, 'sounds')
         self.map_data = []
         '''
