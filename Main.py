@@ -61,7 +61,7 @@ class Game:
         #pg.mixer.music.load(path.join(self.snd_folder))
         # self.player = Player(self, 10, 10)
         # self.all_sprites.add(self.player)
-        # for x in range(10, 20):
+        # for x in range(10, 20):x``
         #     Wall(self, x, 5)
         for row, tiles in enumerate(self.map_data):
             print(row)

@@ -5,7 +5,7 @@ from setting import *
 from math import *
 
 vec = pg.math.Vector2
-
+#Vector code for Mob, to follow player coordinates
 def collide_with_walls(sprite, group, dir):
     if dir == "x":
         hits = pg.sprite.spritecollide(sprite, group, False)
@@ -25,7 +25,8 @@ def collide_with_walls(sprite, group, dir):
                 sprite.pos.y = hits[0].rect.bottom + sprite.rect.height / 2
             sprite.vel.y = 0
             sprite.rect.centery = sprite.pos.y
-
+#Copied from AI, - Magically Worked 
+ 
 # write a player class
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -104,7 +105,7 @@ class Player(pg.sprite.Sprite):
         if dir == 'x':
             hits = pg.sprite.spritecollide(self,self.game.mob, False)
                 
-                    
+                        
 #INCREASING SPEED, WHEN COLLIDING WITH SPEED BOOST
         
         
@@ -132,7 +133,7 @@ class Player(pg.sprite.Sprite):
         # self.rect.y = self.y * TILESIZE
         if self.colorchange:
             self.image = self.game.Supermario_img
-        # UPDATES GAME TO KEEP UP
+        # If image colides with group, image changes to :
 
 class Mob(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -169,6 +170,7 @@ class Mob(pg.sprite.Sprite):
         collide_with_walls(self, self.game.walls, 'y')
         collide_with_walls(self, self.game.fakewalls, 'x')
         collide_with_walls(self, self.game.fakewalls, 'y')
+        #Updates added to collide with Fake wall
 
 
 class Wall(pg.sprite.Sprite):
@@ -203,6 +205,7 @@ class FakeWall(pg.sprite.Sprite):
         self.image.fill(LIGHTGREY)
         self.rect = self.image.get_rect()
         self.image = game.fakewalls_img
+        #Fake Wall to hide from enemies
         self.x = x
         self.y = y
         self.rect.x = x * TILESIZE
@@ -249,6 +252,7 @@ class Colorchange(pg.sprite.Sprite):
         self.image = game.colorchangers_img
         self.x = x
         self.y = y
+        #Customizes Player image
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
         
